@@ -13,6 +13,7 @@ namespace GitHub.Unity
 
         private IEnvironment environment;
         private RepositoryManager repositoryManager;
+        private IBranchCache branchCache;
 
         public ApplicationManagerBase(SynchronizationContext synchronizationContext)
         {
@@ -22,6 +23,7 @@ namespace GitHub.Unity
             UIScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             ThreadingHelper.MainThreadScheduler = UIScheduler;
             TaskManager = new TaskManager(UIScheduler);
+            CacheManager = new CacheManager();
         }
 
         protected void Initialize()
@@ -84,6 +86,11 @@ namespace GitHub.Unity
             new ActionTask(new Task(() => LoadKeychain().Start())).Start();
             new ActionTask(CancellationToken, RunRepositoryManager).Start();
         }
+        
+        public void SetupCache(IBranchCache bcache)
+        {
+            branchCache = bcache;
+        }        
 
         public ITask InitializeRepository()
         {
@@ -234,15 +241,14 @@ namespace GitHub.Unity
         public CancellationToken CancellationToken { get { return TaskManager.Token; } }
         public ITaskManager TaskManager { get; protected set; }
         public IGitClient GitClient { get; protected set; }
-
+        public ISettings LocalSettings { get; protected set; }
+        public ISettings SystemSettings { get; protected set; }
+        public ISettings UserSettings { get; protected set; }
+        public CacheManager CacheManager { get; private set; }
+        public IUsageTracker UsageTracker { get; protected set; }
 
         protected TaskScheduler UIScheduler { get; private set; }
         protected SynchronizationContext SynchronizationContext { get; private set; }
         protected IRepositoryManager RepositoryManager { get { return repositoryManager; } }
-
-        public ISettings LocalSettings { get; protected set; }
-        public ISettings SystemSettings { get; protected set; }
-        public ISettings UserSettings { get; protected set; }
-        public IUsageTracker UsageTracker { get; protected set; }
     }
 }
