@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TestUtils")]
+[assembly: AssemblyTitle("PerformanceTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TestUtils")]
+[assembly: AssemblyProduct("PerformanceTests")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("66a1d219-f61d-4ae4-9bd7-aaeb97276fff")]
+[assembly: Guid("ca8404e9-7306-4651-a6f4-f6a828e8a112")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,10 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: InternalsVisibleTo("UnitTests", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("IntegrationTests", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("PerformanceTests", AllInternalsVisible = true)]
-
-//Required for NSubstitute
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2", AllInternalsVisible = true)]
