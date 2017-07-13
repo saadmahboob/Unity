@@ -34,7 +34,6 @@ namespace PerformanceTests
     public class TreeBuilderTests
     {
         private IEnvironment environment;
-        private Action<FileTreeNode> stateChangeCallback;
         private GitObjectFactory gitObjectFactory;
 
         private PerformanceTestDataSet basicPerformanceTestDataSet;
@@ -127,8 +126,8 @@ namespace PerformanceTests
             var gitStatusEntries = new List<GitStatusEntry>();
             var gitCommitTargets = new List<GitCommitTarget>();
 
-            OriginalTreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>(), stateChangeCallback);
-            OriginalTreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet, stateChangeCallback);
+            OriginalTreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>());
+            OriginalTreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet);
         }
 
         [Benchmark]
@@ -137,8 +136,8 @@ namespace PerformanceTests
             var gitStatusEntries = new List<GitStatusEntry>();
             var gitCommitTargets = new List<GitCommitTarget>();
 
-            TreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>(), stateChangeCallback);
-            TreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet, stateChangeCallback);
+            TreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>());
+            TreeBuilder.BuildTreeRoot(basicPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet);
         }
         [Benchmark]
         public void HeavyOriginalTreeBuilderBenchmark()
@@ -146,8 +145,8 @@ namespace PerformanceTests
             var gitStatusEntries = new List<GitStatusEntry>();
             var gitCommitTargets = new List<GitCommitTarget>();
 
-            OriginalTreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>(), stateChangeCallback);
-            OriginalTreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet, stateChangeCallback);
+            OriginalTreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>());
+            OriginalTreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet);
         }
 
         [Benchmark]
@@ -156,8 +155,8 @@ namespace PerformanceTests
             var gitStatusEntries = new List<GitStatusEntry>();
             var gitCommitTargets = new List<GitCommitTarget>();
 
-            TreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>(), stateChangeCallback);
-            TreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet, stateChangeCallback);
+            TreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.FirstEntryDataSet, gitStatusEntries, gitCommitTargets, new List<string>());
+            TreeBuilder.BuildTreeRoot(heavyPerformanceTestDataSet.SecondEntryDataSet, gitStatusEntries, gitCommitTargets, basicPerformanceTestDataSet.SecondEntryFoldedFolderSet);
         }
     }
 

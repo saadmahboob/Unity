@@ -7,7 +7,7 @@ namespace PerformanceTests
 {
     static class OriginalTreeBuilder
     {
-        internal static void BuildChildNode(FileTreeNode parent, FileTreeNode node, List<string> foldedTreeEntries1, Action<FileTreeNode> stateChangeCallback1)
+        internal static void BuildChildNode(FileTreeNode parent, FileTreeNode node, List<string> foldedTreeEntries)
         {
             if (String.IsNullOrEmpty(node.Label))
             {
@@ -16,7 +16,7 @@ namespace PerformanceTests
             }
 
             node.RepositoryPath = parent.RepositoryPath.ToNPath().Combine(node.Label);
-            parent.Open = !foldedTreeEntries1.Contains(parent.RepositoryPath);
+            parent.Open = !foldedTreeEntries.Contains(parent.RepositoryPath);
 
             // Is this node inside a folder?
             var nodePath = node.Label.ToNPath();
@@ -34,7 +34,7 @@ namespace PerformanceTests
                     if (child.Label.Equals(root))
                     {
                         found = true;
-                        BuildChildNode(child, node, foldedTreeEntries1, stateChangeCallback1);
+                        BuildChildNode(child, node, foldedTreeEntries);
                         break;
                     }
                 }
@@ -43,7 +43,7 @@ namespace PerformanceTests
                 if (!found)
                 {
                     var p = parent.RepositoryPath.ToNPath().Combine(root);
-                    BuildChildNode(parent.Add(new FileTreeNode(root, stateChangeCallback1) { RepositoryPath = p }), node, foldedTreeEntries1, stateChangeCallback1);
+                    BuildChildNode(parent.Add(new FileTreeNode(root) { RepositoryPath = p }), node, foldedTreeEntries);
                 }
             }
             else if (nodePath.ExtensionWithDot == ".meta")
@@ -56,7 +56,7 @@ namespace PerformanceTests
                     if (child.Label.Equals(nodePath.Parent.Combine(nodePath.FileNameWithoutExtension)))
                     {
                         found = true;
-                        BuildChildNode(child, node, foldedTreeEntries1, stateChangeCallback1);
+                        BuildChildNode(child, node, foldedTreeEntries);
                         break;
                     }
                 }
@@ -72,7 +72,7 @@ namespace PerformanceTests
             }
         }
 
-        internal static FileTreeNode BuildTreeRoot(IList<GitStatusEntry> newEntries, List<GitStatusEntry> gitStatusEntries, List<GitCommitTarget> gitCommitTargets, List<string> foldedTreeEntries, Action<FileTreeNode> stateChangeCallback, Func<string, object> iconLoaderFunc = null)
+        internal static FileTreeNode BuildTreeRoot(IList<GitStatusEntry> newEntries, List<GitStatusEntry> gitStatusEntries, List<GitCommitTarget> gitCommitTargets, List<string> foldedTreeEntries, Func<string, object> iconLoaderFunc = null)
         {
             Guard.ArgumentNotNullOrEmpty(newEntries, "newEntries");
 
@@ -118,7 +118,7 @@ namespace PerformanceTests
             // TODO: In stead of completely rebuilding the tree structure, figure out a way to migrate open/closed states from the old tree to the new
             // Build tree structure
 
-            var tree = new FileTreeNode(FileSystemHelpers.FindCommonPath(gitStatusEntries.Select(e => e.Path)), stateChangeCallback);
+            var tree = new FileTreeNode(FileSystemHelpers.FindCommonPath(gitStatusEntries.Select(e => e.Path)));
             tree.RepositoryPath = tree.Path;
 
             for (var index1 = 0; index1 < gitStatusEntries.Count; index1++)
@@ -127,13 +127,13 @@ namespace PerformanceTests
                 var entryPath = gitStatusEntry.Path.ToNPath();
                 if (entryPath.IsChildOf(tree.Path)) entryPath = entryPath.RelativeTo(tree.Path.ToNPath());
 
-                var node = new FileTreeNode(entryPath, stateChangeCallback) { Target = gitCommitTargets[index1] };
+                var node = new FileTreeNode(entryPath) { Target = gitCommitTargets[index1] };
                 if (!String.IsNullOrEmpty(gitStatusEntry.ProjectPath))
                 {
                     node.Icon = iconLoaderFunc?.Invoke(gitStatusEntry.ProjectPath);
                 }
 
-                OriginalTreeBuilder.BuildChildNode(tree, node, foldedTreeEntries, stateChangeCallback);
+                OriginalTreeBuilder.BuildChildNode(tree, node, foldedTreeEntries);
             }
 
             return tree;
