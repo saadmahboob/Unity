@@ -61,12 +61,12 @@ namespace GitHub.Unity
 
             if (keychainItem == null)
             {
-                logger.Warning("Cannot load host from Credential Manager; removing from cache");
+                logger.Warning("Cannot load host from Credential Manager; removing Cached: {0}", cachedConnection.Username);
                 await Clear(host, false);
             }
             else if (keychainItem.Username != cachedConnection.Username)
             {
-                logger.Warning("Item loaded from credential manager does not match connection cache ; removing from cache");
+                logger.Warning("Keychain: {0} Cached: {1} manager does not match connection cache ; removing from cache", keychainItem.Username, cachedConnection.Username);
                 await Clear(host, false);
             }
             else
