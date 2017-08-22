@@ -153,7 +153,16 @@ namespace GitHub.Unity
             logger.Trace("Clear Host:{0}", host);
 
             // delete connection in the connection list
-            connectionCache.Remove(host);
+            var removed = connectionCache.Remove(host);
+            if (removed)
+            {
+                logger.Trace("Host:{0} Removed from connection cache", host);
+            }
+            else
+            {
+                logger.Trace("Host:{0} Not found in connection cache", host);
+            }
+
 
             //clear octokit credentials
             FindOrCreateAdapter(host).Clear();
